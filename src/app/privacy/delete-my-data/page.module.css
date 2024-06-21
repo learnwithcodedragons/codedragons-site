@@ -1,0 +1,67 @@
+.main {
+    background-color: white;
+}
+
+.formWrapper {
+    background-color: whitesmoke;
+    list-style-type: none;
+    padding: 0;
+    border-radius: 3px;
+    width: 100%;
+}
+
+.formRow {
+    display: flex;
+    justify-content: flex-end;
+    padding: 1em;
+}
+
+.formRow>label {
+    padding: .5em 1em .5em 0;
+    flex: 1;
+    font-size: small;
+}
+
+.formRow>input {
+    flex: 2;
+}
+
+.formRow>input,
+.formRow>button {
+    padding: .5em;
+}
+
+.formRow>button:active {
+    background: darkgray;
+}
+
+.formRow>button {
+    background: gray;
+    color: white;
+    border: 0;
+}
+
+.numberedList {
+    list-style-type: decimal;
+    /* Ensures the list is numbered */
+    padding-left: 20px;
+    /* Adds some space on the left for the numbers */
+}
+
+.numberedList li {
+    margin-bottom: 10px;
+    /* Adds space between list items */
+}
+
+.text {
+    padding-bottom: 20px;
+    padding-top: 20px;
+}
+
+.container {
+    padding: 20px;
+}
+
+.links {
+    color: blue;
+}

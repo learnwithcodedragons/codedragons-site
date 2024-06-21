@@ -1,0 +1,28 @@
+.main {
+  background-color: white;
+}
+
+.numberedList {
+  list-style-type: decimal;
+  /* Ensures the list is numbered */
+  padding-left: 20px;
+  /* Adds some space on the left for the numbers */
+}
+
+.numberedList li {
+  margin-bottom: 10px;
+  /* Adds space between list items */
+}
+
+.text {
+  padding-bottom: 20px;
+  padding-top: 20px;
+}
+
+.container {
+  padding: 20px;
+}
+
+.links {
+  color: blue;
+}

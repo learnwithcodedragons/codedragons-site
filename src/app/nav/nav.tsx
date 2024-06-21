@@ -7,9 +7,9 @@ const Nav = () => {
     return (
         <nav className={styles.navBar}>
             <ul className={styles.navBarItems}>
-                <li><a href="#">
+                <li><a href="/">
 
-                    <Image
+                    <img
                         src="/code-dragons-logo.png"
                         alt="Code Dragons Logo"
                         width={48}
@@ -17,9 +17,7 @@ const Nav = () => {
                     />
 
                 </a></li>
-                <li><a href="#">Games</a></li>
-                <li><a href="#">Blog</a></li>
-                <li><a href="#">About</a></li>
+                <li><a href="/privacy">Privacy</a></li>
             </ul>
         </nav>
     );
