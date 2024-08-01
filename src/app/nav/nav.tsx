@@ -18,6 +18,7 @@ const Nav = () => {
 
                 </a></li>
                 <li><a href="/privacy">Privacy</a></li>
+                <li><a href="/competition">Competition</a></li>
             </ul>
         </nav>
     );
