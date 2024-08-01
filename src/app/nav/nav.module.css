@@ -18,3 +18,25 @@
     padding: 0 20px 0 20px;
     color: white;
 }
+
+.navBarItemsRight {
+    margin-left: auto;
+}
+
+.buttonStyle {
+    display: inline-block; /* Allows the application of padding and margins */
+    background-color: #652C90; /* Button color */
+    color: white; /* Text color */
+    padding: 10px 20px; /* Top and bottom padding, left and right padding */
+    text-align: center; /* Center the text inside */
+    text-decoration: none; /* Remove underline from links */
+    font-size: 16px; /* Text size */
+    border: none; /* Remove borders */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Change mouse cursor to pointer */
+    transition: background-color 0.3s; /* Smooth background color change on hover */
+}
+
+.buttonStyle:hover {
+    background-color: #0056b3; /* Darker shade on hover for visual feedback */
+}

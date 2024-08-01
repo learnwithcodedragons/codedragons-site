@@ -19,6 +19,9 @@ const Nav = () => {
                 </a></li>
                 <li><a href="/privacy">Privacy</a></li>
                 <li><a href="/competition">Competition</a></li>
+                <span className={styles.navBarItemsRight}>
+                    <li><a href="https://play.google.com/store/apps/details?id=com.CodeDragons.AquaRush" className={styles.buttonStyle}>Install on Google Play store</a></li>
+                </span>
             </ul>
         </nav>
     );
