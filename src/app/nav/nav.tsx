@@ -1,30 +1,20 @@
-import React from 'react';
 import styles from "./nav.module.css";
-import Image from "next/image";
 
-
-const Nav = () => {
-    return (
-        <nav className={styles.navBar}>
+const Nav = () => (
+    <header className={styles.header}>
+        <nav className={styles.navBar} aria-label="Main navigation">
+            <a className={styles.brand} href="/" aria-label="Numberfall home">
+                <span className={styles.brandTile} aria-hidden="true">9</span>
+                <span>Numberfall</span>
+            </a>
             <ul className={styles.navBarItems}>
-                <li><a href="/">
-
-                    <img
-                        src="/code-dragons-logo.png"
-                        alt="Code Dragons Logo"
-                        width={48}
-                        height={48}
-                    />
-
-                </a></li>
-                <li><a href="/privacy">Privacy</a></li>
-                <li><a href="/competition">Competition</a></li>
-                <span className={styles.navBarItemsRight}>
-                    <li><a href="https://play.google.com/store/apps/details?id=com.CodeDragons.AquaRush" className={styles.buttonStyle}>Install on Google Play store</a></li>
-                </span>
+                <li><a href="#how-it-plays">How it plays</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#daily">Daily challenge</a></li>
             </ul>
+            <span className={styles.availability}>Coming soon</span>
         </nav>
-    );
-};
+    </header>
+);
 
 export default Nav;

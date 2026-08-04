@@ -1,14 +1,11 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
 import Nav from "./nav/nav";
 import Footer from "./footer/footer";
 
-const inter = Inter({ subsets: ["latin"] });
-
 export const metadata: Metadata = {
-  title: "CodeDragons",
-  description: "The code dragons website",
+  title: "Numberfall — A Fast, Vibrant Arithmetic Puzzle Game",
+  description: "Link numbers and operators, solve targets, and chase high scores in Numberfall—an offline-friendly arithmetic puzzle game.",
 };
 
 export default function RootLayout({
@@ -18,9 +15,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body>
+        <a className="skip-link" href="#main-content">Skip to content</a>
         <Nav />
-        <div className="main">
+        <div id="main-content">
           {children}
         </div>
         <Footer />

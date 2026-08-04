@@ -1,12 +1,11 @@
-# CodeDragons site
+# Numberfall website
 
-Public website for CodeDragons' Raft Rush mobile game. It contains the game landing page, competition information, privacy policy, and the player data-deletion request form.
+Public marketing website for Numberfall, a fast, offline-friendly arithmetic puzzle game by CodeDragons.
 
-The application is a Next.js App Router project built as a static export and deployed to AWS. Start with:
-
-- [Architecture](ARCHITECTURE.md) — system boundaries, routes, request flows, integrations, and deployment.
-- [Development guide](docs/development.md) — local setup, commands, testing status, and validation.
-- [Agent instructions](AGENTS.md) — repository-specific safety and completion rules for coding agents.
+- [Architecture](ARCHITECTURE.md) — system boundary, rendering, and deployment.
+- [Development guide](docs/development.md) — setup, commands, and validation.
+- [Numberfall product brief](docs/numberfall/README.md) — approved product, content, and visual direction.
+- [Agent instructions](AGENTS.md) — repository-specific safety rules.
 
 ```sh
 npm ci

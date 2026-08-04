@@ -27,7 +27,7 @@ Do not manually edit `node_modules/`, `.next/`, `out/`, `next-env.d.ts`, or `*.t
 
 ## Testing strategy
 
-There is currently no automated testing strategy in the repository. Until one is introduced, validation consists of linting, TypeScript checking, a production build, and a focused manual check of the affected static route. Do not exercise the production deletion endpoint during testing.
+There is currently no automated testing strategy in the repository. Until one is introduced, validation consists of linting, TypeScript checking, a production build, and a focused manual check of the affected static route.
 
 For application changes, run:
 
@@ -37,7 +37,7 @@ npx tsc --noEmit
 npm run build
 ```
 
-If a change introduces tests, add a documented npm script and run the relevant tests. Prefer tests that mock the deletion API rather than making external requests.
+If a change introduces tests, add a documented npm script and run the relevant tests. The current site has no runtime network requests.
 
 Known validation warnings:
 
@@ -47,7 +47,7 @@ Known validation warnings:
 
 ## Environment and secrets
 
-The frontend has no environment-variable references. The deletion endpoint is currently hard-coded in the client component and is therefore public.
+The frontend has no environment-variable references. Final store, support, privacy, and canonical URLs have not been supplied; do not invent them.
 
 Deployment uses GitHub Actions secrets named:
 
@@ -55,7 +55,7 @@ Deployment uses GitHub Actions secrets named:
 - `AWS_SECRET_ACCESS_KEY`
 - `CLOUDFRONT_DISTRIBUTION_ID`
 
-Never place secret values in source, `.env` files committed to Git, client-side variables, logs, tests, or documentation. Local development and validation do not require these deployment secrets. Do not run the deployment workflow, modify AWS resources, or contact the production deletion service as part of ordinary development.
+Never place secret values in source, `.env` files committed to Git, client-side variables, logs, tests, or documentation. Local development and validation do not require these deployment secrets. Do not run the deployment workflow or modify AWS resources as part of ordinary development.
 
 ## Making changes
 

@@ -1,108 +1,62 @@
 # Architecture
 
-## Purpose and journeys
+## Purpose
 
-This repository contains the public companion website for CodeDragons' Raft Rush mobile game. It supports four user journeys:
+This repository contains the public marketing website for Numberfall. It explains the core arithmetic-path gameplay, promotes confirmed game features, describes the offline Daily Challenge and accessibility options, and presents an honest pre-launch Google Play status.
 
-1. Learn about Raft Rush and follow the Google Play installation link.
-2. Read competition information and terms.
-3. Read the game's privacy policy and links to relevant third-party policies.
-4. Submit a request to delete game data using an email address, game user ID, and optional advertising ID.
+Approved product and visual claims live in [docs/numberfall](docs/numberfall/README.md). Missing store, support, privacy, and platform URLs must remain absent rather than being guessed.
 
 ## System boundary
 
-The repository owns a Next.js frontend and its static build configuration. It does **not** contain the game, the deletion service implementation, infrastructure definitions, a database, authentication, or administration tools.
+The repository owns a Next.js frontend and its static build configuration. It does not contain the Numberfall game, a backend, database, authentication, analytics, payments, or infrastructure definitions.
 
-`next.config.mjs` sets `output: "export"`, so production consists entirely of static files. Features that require a Next.js server—API routes, server actions, request-time rendering, or middleware—are outside the current deployment boundary.
+`next.config.mjs` uses `output: "export"`, so production consists entirely of static files. API routes, server actions, middleware, and request-time rendering are outside the current deployment boundary.
 
 ```mermaid
 flowchart LR
     User["Web browser"] --> CDN["CloudFront"]
     CDN --> S3["S3 static site bucket"]
-    User --> API["AWS API Gateway deletion endpoint"]
-    Site["Next.js static export"] -->|"CI syncs out/"| S3
-    API -. "implementation not in repository" .-> Downstream["Deletion processing / game services"]
+    Build["Next.js static export"] -->|"CI syncs out/"| S3
 ```
 
-**Architectural assumption:** The workflow syncs the site to S3 and then invalidates a CloudFront distribution. It does not contain the CloudFront origin configuration, so the direct CloudFront-to-bucket relationship shown above is strongly implied but cannot be verified here. The handling of a deletion request after API Gateway accepts it is also not documented in this repository.
+**Architectural assumption:** The workflow syncs files to S3 and invalidates a CloudFront distribution, but the CloudFront origin configuration is not present here. The connection shown above is strongly implied rather than directly verifiable.
 
 ## Routes and rendering
 
 | Route | Source | Responsibility | Rendering |
 | --- | --- | --- | --- |
-| `/` | `src/app/page.tsx` | Game landing page | Static Server Component |
-| `/competition/` | `src/app/competition/page.tsx` | Competition details and terms | Static Server Component |
-| `/privacy/` | `src/app/privacy/page.tsx` | Privacy policy | Static Server Component |
-| `/privacy/delete-my-data/` | `src/app/privacy/delete-my-data/page.tsx` | Data-deletion form | Static page with hydrated Client Component |
+| `/` | `src/app/page.tsx` | Single-page Numberfall marketing experience | Static Server Component |
 
-`src/app/layout.tsx` provides the HTML shell, metadata, Inter font, navigation, and footer for every route. Page and component styles are colocated CSS Modules; `src/app/globals.css` contains the small global reset and shell layout.
+`src/app/layout.tsx` provides metadata, skip navigation, the shared header, and footer. The homepage uses semantic sections and CSS-only game motifs. Components remain Server Components; there is currently no client-side state, runtime data fetching, loading state, or empty state.
 
-App Router files are Server Components unless marked otherwise. The deletion page is the only `'use client'` component because it uses form events, `useState`, and browser-side `fetch`. No repository code runs on a server after deployment.
-
-## Data flow and state
-
-Most content is compiled into static HTML and has no runtime data source. The deletion form is the only data-fetching flow:
-
-```mermaid
-sequenceDiagram
-    actor User
-    participant Page as Deletion form in browser
-    participant API as AWS API Gateway
-
-    User->>Page: Enter identifiers and submit
-    Page->>API: POST JSON to /prod/deletion-requests
-    alt HTTP response is successful
-        API-->>Page: 2xx response
-        Page->>Page: Clear fields and show success
-    else HTTP response is not successful
-        API-->>Page: Non-2xx response
-        Page->>Page: Show generic error
-    end
-```
-
-The component keeps form values and status in local React state. There is no shared state manager, caching layer, or server-side data fetching. Network exceptions are not currently caught, and the UI has no pending state or duplicate-submission guard.
-
-## Authentication and authorisation
-
-There is no site authentication or authorisation flow. All routes are public. The browser sends deletion requests without credentials in repository code. Any API-side validation, throttling, authentication, or authorisation is outside this repository and cannot be verified.
-
-## External integrations
-
-- **AWS API Gateway:** hard-coded browser endpoint for deletion requests.
-- **AWS S3:** receives the `out/` static export during deployment.
-- **AWS CloudFront:** invalidated after deployment.
-- **Unity Ads and Unity Leaderboards:** described by the privacy pages as game data processors; there is no Unity SDK integration in this site.
-- **Google Play:** external installation link.
-- **Google Fonts:** Inter is configured through `next/font` and resolved during the Next.js build.
-- **X/Twitter, Google support, and Unity policy pages:** outbound informational links.
+There is no authentication or authorisation flow. The site is public and does not collect user input. It has no runtime environment-variable references or external service calls.
 
 ## Deployment
 
 A push to `main` triggers `.github/workflows/main.yml`:
 
 1. Check out the repository.
-2. Configure AWS credentials for `eu-west-2`.
-3. install Node.js `20.11.1` and run `npm ci`.
-4. Run `npm run build`, producing `out/`.
-5. Synchronise `out/` to `s3://codedragons.co.uk` with deletion enabled.
-6. Invalidate all paths in the configured CloudFront distribution.
+2. Configure AWS credentials in `eu-west-2`.
+3. Install Node.js `20.11.1` and dependencies with `npm ci`.
+4. Build the static export into `out/`.
+5. Synchronise `out/` to `s3://codedragons.co.uk`.
+6. Invalidate the configured CloudFront distribution.
 
-The workflow references GitHub secrets `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, and `CLOUDFRONT_DISTRIBUTION_ID`. Infrastructure provisioning, DNS, rollback, monitoring, and disaster recovery are not documented here.
+Deployment uses the GitHub secrets `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, and `CLOUDFRONT_DISTRIBUTION_ID`. Infrastructure provisioning, DNS, rollback, monitoring, and disaster recovery are not documented in this repository.
 
-## Architectural decisions visible in code
+## Decisions visible in code
 
-- Static export keeps the site deployable as files on S3; `trailingSlash` supports directory-style URLs and images are unoptimized for export compatibility.
-- Interactivity is isolated to the deletion page; other routes remain static Server Components.
-- Styling uses CSS Modules colocated with routes/components rather than a separate design system.
-- The deletion API address is compiled into the public client bundle rather than supplied through environment configuration.
+- Static export keeps the site deployable as files on S3.
+- The initial release is one focused marketing route with anchored sections.
+- The unavailable store URL is represented by non-interactive “Coming soon” text.
+- Visuals use CSS and semantic HTML because the marketing assets referenced by the Numberfall handoff are not present in this repository.
+- The site uses a system font stack and has no trackers, cookies, accounts, forms, or third-party embeds.
 
-These are observations from the current implementation, not historical decision records.
+These are observations from the implementation, not historical decision records.
 
 ## Known limitations
 
-- No automated tests, test runner, observability, analytics, or application-level error reporting are present.
-- CI builds and deploys but has no separate lint, type-check, or test steps.
-- The deletion service contract and downstream processing are undocumented and cannot be validated locally without contacting production.
-- The deletion form provides limited network-error handling.
-- Competition and copyright content is dated 2024.
-- Known markup/style issues are listed in [AGENTS.md](AGENTS.md#known-quirks).
+- Real gameplay screenshots and store artwork are unavailable in this repository, so the current site cannot provide photographic gameplay proof.
+- Final store, support, privacy, and canonical URLs have not been supplied.
+- There are no automated tests, analytics, or application-level error reporting.
+- CI does not have separate lint, type-check, or test steps.
