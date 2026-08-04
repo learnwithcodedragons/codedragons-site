@@ -1,7 +1,9 @@
 'use client';
-import { FormEvent, useState } from "react";
+import { FormEvent, useRef, useState } from "react";
 import styles from "./page.module.css";
 import Image from "next/image";
+
+const REQUEST_TIMEOUT_MS = 10_000;
 
 export default function Page() {
 
@@ -9,35 +11,59 @@ export default function Page() {
     const [advertisingId, setAdvertisingId] = useState("");
     const [emailAddress, setEmailAddress] = useState("");
     const [isSubmitted, setIsSubmitted] = useState(false);
-    const [isError, setIsError] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    const submissionInProgress = useRef(false);
 
     async function onSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
+
+        if (submissionInProgress.current) {
+            return;
+        }
+
+        submissionInProgress.current = true;
+        setIsSubmitting(true);
+        setIsSubmitted(false);
+        setErrorMessage(null);
+
         const data = {
             userId,
             advertisingId,
             emailAddress
         };
-        const response = await fetch('https://kqszy8n9t0.execute-api.eu-west-2.amazonaws.com/prod/deletion-requests', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
-        });
+        const controller = new AbortController();
+        const timeoutId = window.setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
 
-        if (response.ok) {
+        try {
+            const response = await fetch('https://kqszy8n9t0.execute-api.eu-west-2.amazonaws.com/prod/deletion-requests', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+                signal: controller.signal,
+            });
+
+            if (!response.ok) {
+                throw new Error(`Deletion request failed with status ${response.status}`);
+            }
+
             setIsSubmitted(true);
-            setIsError(false);
             setUserId("");
             setAdvertisingId("");
             setEmailAddress("");
-        } else {
-            setIsError(true);
-            setIsSubmitted(false);
+        } catch (error) {
+            const requestTimedOut = error instanceof DOMException && error.name === "AbortError";
+            setErrorMessage(requestTimedOut
+                ? "The request timed out. Please check your connection and try again."
+                : "We could not submit your request. Please check your connection and try again."
+            );
+        } finally {
+            window.clearTimeout(timeoutId);
+            submissionInProgress.current = false;
+            setIsSubmitting(false);
         }
-
-
     }
     return (
         <div className={styles.container}>
@@ -73,7 +99,7 @@ export default function Page() {
                 If you would like to delete this data from these services, please fill in the form below.
             </p>
 
-            <form onSubmit={onSubmit}>
+            <form onSubmit={onSubmit} aria-busy={isSubmitting}>
                 <ul className={styles.formWrapper}>
                     <li className={styles.formRow}>
                         <label htmlFor="email">Email*</label>
@@ -88,10 +114,12 @@ export default function Page() {
                         <input type="text" id="advertisingId" value={advertisingId} onChange={(e) => setAdvertisingId(e.target.value)} />
                     </li>
                     <li className={styles.formRow}>
-                        <button type="submit">Submit</button>
+                        <button type="submit" disabled={isSubmitting}>
+                            {isSubmitting ? "Submitting..." : "Submit"}
+                        </button>
                     </li>
-                    {isSubmitted && <li className={styles.formRow}>Your request has been submitted</li>}
-                    {isError && <li className={styles.formRow}>There was an error submitting your request</li>}
+                    {isSubmitted && <li className={styles.formRow} role="status">Your request has been submitted</li>}
+                    {errorMessage && <li className={styles.formRow} role="alert">{errorMessage}</li>}
                 </ul>
             </form>
         </div >
