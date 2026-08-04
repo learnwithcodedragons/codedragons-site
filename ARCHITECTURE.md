@@ -26,6 +26,7 @@ flowchart LR
 | Route | Source | Responsibility | Rendering |
 | --- | --- | --- | --- |
 | `/` | `src/app/page.tsx` | Single-page Numberfall marketing experience | Static Server Component |
+| `/privacy/numberfall/` | `src/app/privacy/numberfall/page.tsx` | Numberfall privacy policy | Static Server Component |
 
 `src/app/layout.tsx` provides metadata, skip navigation, the shared header, and footer. The homepage uses semantic sections and CSS-only game motifs. Components remain Server Components; there is currently no client-side state, runtime data fetching, loading state, or empty state.
 
@@ -57,6 +58,6 @@ These are observations from the implementation, not historical decision records.
 ## Known limitations
 
 - Real gameplay screenshots and store artwork are unavailable in this repository, so the current site cannot provide photographic gameplay proof.
-- Final store, support, privacy, and canonical URLs have not been supplied.
+- Final store, support, and canonical URLs have not been supplied.
 - There are no automated tests, analytics, or application-level error reporting.
 - CI does not have separate lint, type-check, or test steps.

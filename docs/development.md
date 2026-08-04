@@ -47,7 +47,7 @@ Known validation warnings:
 
 ## Environment and secrets
 
-The frontend has no environment-variable references. Final store, support, privacy, and canonical URLs have not been supplied; do not invent them.
+The frontend has no environment-variable references. The Numberfall privacy policy is published at `/privacy/numberfall/`; final store, support, and canonical URLs have not been supplied, so do not invent them.
 
 Deployment uses GitHub Actions secrets named:
 

@@ -22,5 +22,4 @@ Never silently change a gameplay claim. Never invent reviews, awards, player cou
 
 ## Current launch constraint
 
-The repository identity remains explicitly marked as a development placeholder. Until a final public store URL is supplied, use a truthful non-link CTA such as **Coming soon on Google Play** or a configurable placeholder. Do not infer a Google Play URL from `com.codedragons.numberfall`.
-
+The repository identity remains explicitly marked as a development placeholder. Until a final public store URL is supplied, use a truthful non-link CTA such as **Coming soon on Google Play** or a configurable placeholder. Do not infer a Google Play URL from `com.codedragons.numberfall`. The public Numberfall privacy policy is `/privacy/numberfall/`.
